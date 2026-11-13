@@ -49,6 +49,36 @@ This was a group case study I completed as part of the **[WBS Coding School](htt
 3. **Save big discounts for key dates:** Black Friday, Christmas and clearing old stock.
 4. **Test before changing everything:** lower the discount on a small group of products first and measure what happens to sales.
 
+## ❓ Business Questions & Answers
+
+| Question | Answer |
+|---|---|
+| **1. How many products are discounted?** | **93%** of items sold were sold below list price. **96%** of the products sold were discounted at least once. |
+| **2. How big are the discounts?** | **21.4%** on average per order line (median 17.6%). Weighted by euros it's **16.3%** (€1.53M off a list value of €9.34M), because expensive items get smaller discounts. |
+| **3. How do seasons and special dates affect sales?** | Sales peak in **November** (Black Friday month, 19% of all revenue) and stay high until Christmas, then fall. The average discount stays between 15% and 25% all year, so the calendar moves sales much more than the discount does. |
+| **4. How can products be grouped into categories?** | 9,992 products sorted into **12 groups** (86 sub-categories), using the product type code first and then word searches on product names. A new `condition` column marks New, Open box, Refurbished and Second hand items. |
+| **5. How are prices spread across categories?** | Very different price levels. Median prices: Mac & Computers about **€2,700**, NAS & Servers about €980, iPhones about €770, iPads about €730, down to Cases, Cables & Accessories about **€40**. |
+| **6. How could data collection be improved?** | See [How to Improve Data Collection](#-how-to-improve-data-collection). |
+
+## 🧹 How the Data Was Cleaned
+
+| Step | Notebook | What happens | Rows left |
+|---|---|---|---|
+| Start | raw data | Original tables from Eniac | 226,909 orders · 293,983 order lines · 19,326 products |
+| 1. Data cleaning | [`01_data-cleaning.ipynb`](scripts/01_data-cleaning.ipynb) | Fixes problems inside each table: 8,746 duplicate products, 5 orders with no total, 46 products with no price, dates stored as text, 36,169 unreadable two-dot prices (whole orders removed), 542 broken product prices, an unusable promo price column (92% broken) | 226,904 orders · 216,250 order lines · 9,992 products |
+| 2. Data quality | [`02_data-quality.ipynb`](scripts/02_data-quality.ipynb) | Checks the tables make business sense together: Completed orders only, no €0 totals, no prices of €0 or less, orders present in both tables, no unknown products, and the amount paid matches the products bought (unexplained differences removed with the IQR method) | **40,985 orders · 53,231 order lines** |
+| 3. Product categories | [`03_product-categories.ipynb`](scripts/03_product-categories.ipynb) | Adds a sub-category, a grouped category and a condition to every product | 9,992 products in 12 groups |
+| 4. Analysis | [`04_analysis-charts.ipynb`](scripts/04_analysis-charts.ipynb) | Answers the business questions and draws the 4 slide charts | 4 charts |
+
+`brands.csv` needed no cleaning and was not used in the final analysis.
+
+## 💡 How to Improve Data Collection
+
+1. **Add automated input checks.** Broken prices (`1.137.99`) cost us every sale of €1,000 or more, and March 2017 is almost empty.
+2. **Record discounts and shipping separately at checkout.** Today both are hidden inside the order total, so order-level discounts (vouchers) can't be measured.
+3. **Record product costs.** With costs we could measure profit, not only revenue.
+4. **Keep the product catalogue complete and clean.** 1,354 orders contained products missing from the catalogue. Some product type codes were turned into scientific notation (e.g. `5,74E+15`) by a spreadsheet, and one type code (`1298`) mixes a product's condition (open box) with its type.
+
 ## 📈 Visualisations
 
 ### Sales follow the calendar. The average discount stays near 20% all year
