@@ -84,7 +84,7 @@ The data came from Eniac's internal database: 4 tables (orders, order lines, pro
 ## Repository structure
 
 ```
-ecommerce_discount-analysis_eniac/
+eniac-discount-strategy/
 ├── README.md
 ├── data/
 │   ├── raw-data/                  original files from Eniac
